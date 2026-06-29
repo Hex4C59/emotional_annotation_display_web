@@ -1,0 +1,1133 @@
+/*===================================================
+    1. 基础样式与重置
+===================================================*/
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+}
+
+/*===================================================
+    2. 页面布局与容器
+===================================================*/
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 量表切换导航样式 */
+.scale-navigation {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.nav-buttons {
+    display: inline-flex;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+}
+
+.nav-button {
+    padding: 12px 24px;
+    text-decoration: none;
+    color: #666;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    margin: 0 2px;
+    display: inline-block;
+}
+
+.nav-button:hover {
+    color: #3498db;
+    background-color: #f8f9fa;
+}
+
+.nav-button.active {
+    color: #ffffff;
+    background-color: #3498db;
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+}
+
+/* 主体内容区布局 */
+.main-content {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* 侧边栏样式 */
+.sidebar {
+    flex: 0 0 300px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    height: calc(100vh - 150px);
+    display: flex;
+    flex-direction: column;
+}
+
+/* 主要内容区域 */
+.content {
+    flex: 1;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+/*===================================================
+    3. 文本与标题样式
+===================================================*/
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+h2 {
+    color: #3498db;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+h3 {
+    margin-bottom: 15px;
+}
+
+/*===================================================
+    4. 侧边栏组件样式
+===================================================*/
+/* 说话人选择下拉框 */
+.speaker-selection {
+    margin-bottom: 20px;
+}
+
+#speaker-select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    margin-top: 5px;
+}
+
+/* 音频列表区域 */
+.audio-list {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.list-container {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+/* 音频列表项样式 */
+.audio-item {
+    padding: 8px 10px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.audio-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* 当前选中的音频项 */
+.audio-item.active {
+    background-color: #e1f5fe;
+    font-weight: bold;
+}
+
+/* 已标注的音频项 - 仅VA标注（红色） */
+.audio-item.labeled-va {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* 已标注的音频项 - 完整标注（绿色） */
+.audio-item.labeled-complete {
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+/* 已标注的音频项 - 离散情感完整标注（蓝色） */
+.audio-item.labeled-discrete {
+    color: #3498db;
+    font-weight: bold;
+}
+
+
+
+/* 保持向后兼容的通用已标注样式 */
+.audio-item.labeled {
+    color: #2ecc71;
+}
+
+/*===================================================
+    5. 音频播放器样式
+===================================================*/
+.audio-player {
+    margin-bottom: 30px;
+}
+
+.player-container {
+    margin-top: 15px;
+}
+
+/* 原生audio元素样式 */
+audio {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* 播放器控制区域 */
+.player-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+/* 播放/暂停按钮 */
+#play-pause-button {
+    background-color: #3498db;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+#play-pause-button:hover {
+    background-color: #2980b9;
+}
+
+/*===================================================
+    6. 情感标注区域样式
+===================================================*/
+.emotion-labeling {
+    margin-bottom: 30px;
+}
+
+.emotion-container {
+    margin-top: 15px;
+}
+
+/* 患者/非患者选择区域 */
+.patient-option {
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+    text-align: center; /* 居中对齐 */
+}
+
+.option-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: center; /* 居中对齐 */
+}
+
+/* 较大的单选按钮 */
+.option-group input[type="radio"] {
+    width: 40px; /* 保持宽度 */
+    height: 40px; /* 保持高度 */
+    margin-right: 10px; /* 调整右侧间距 */
+    cursor: pointer;
+}
+
+.option-group label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px; /* 增大字体 */
+    font-weight: 500; /* 加粗字体 */
+    margin-right: 20px; /* 右侧间距 */
+}
+
+/*===================================================
+    7. 滑动条样式
+===================================================*/
+/* 滑动条容器 */
+.slider-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column; /* 从上到下排列 */
+}
+
+.slider-group {
+    margin-bottom: 15px;
+}
+
+.slider-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* 自定义滑动条样式 */
+.slider-group input[type="range"] {
+    width: 100%;
+    height: 20px; /* 增加高度便于操作 */
+    -webkit-appearance: none; /* 去除默认样式 */
+    appearance: none;
+    background: #F1F3F4; /* 设置轨道颜色，与音频播放条一致 */
+    border-radius: 10px; /* 圆角边框 */
+    outline: none; /* 去除聚焦时的轮廓 */
+    margin: 10px 0 5px 0;
+}
+
+/* Chrome/Safari/Opera 滑块样式 */
+.slider-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 30px; /* 滑块宽度 */
+    height: 30px; /* 滑块高度 */
+    background: #3498db; /* 滑块颜色 */
+    border-radius: 50%; /* 圆形滑块 */
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 阴影效果 */
+}
+
+/* Firefox 滑块样式 */
+.slider-group input[type="range"]::-moz-range-thumb {
+    width: 30px; 
+    height: 30px;
+    background: #3498db;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Firefox 轨道样式 */
+.slider-group input[type="range"]::-moz-range-track {
+    height: 20px;
+    background: #F1F3F4;
+    border-radius: 10px;
+}
+
+/* IE 轨道样式 */
+.slider-group input[type="range"]::-ms-track {
+    height: 20px;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+}
+
+.slider-group input[type="range"]::-ms-fill-lower {
+    background: #c0c0c0;
+    border-radius: 10px;
+}
+
+.slider-group input[type="range"]::-ms-fill-upper {
+    background: #c0c0c0;
+    border-radius: 10px;
+}
+
+.slider-group input[type="range"]::-ms-thumb {
+    width: 30px;
+    height: 30px;
+    background: #3498db;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* 滑动条交互状态样式 */
+.slider-group input[type="range"]:hover::-webkit-slider-thumb,
+.slider-group input[type="range"]:focus::-webkit-slider-thumb {
+    background: #2980b9;
+}
+
+.slider-group input[type="range"]:hover::-moz-range-thumb,
+.slider-group input[type="range"]:focus::-moz-range-thumb {
+    background: #2980b9;
+}
+
+.slider-group input[type="range"]:hover::-ms-thumb,
+.slider-group input[type="range"]:focus::-ms-thumb {
+    background: #2980b9;
+}
+
+/* 滑动条数值显示 */
+.slider-group span {
+    display: inline-block;
+    margin-left: 0px;
+    font-weight: bold;
+}
+
+/* 滑动条刻度调整 */
+.slider-ticks {
+    position: relative;
+    display: flex !important; /* 改用flex而不是grid */
+    justify-content: space-between; /* 均匀分布各刻度点 */
+    width: 100%;
+    height: 20px;
+    margin-top: 5px;
+    font-size: 18px;
+    color: #333;
+}
+
+.slider-ticks span {
+    display: block;
+    text-align: center;
+    width: auto !important; /* 允许自然宽度 */
+    position: relative;
+}
+
+/* 首尾刻度对齐 */
+.slider-ticks span:first-child {
+    text-align: left;
+}
+
+.slider-ticks span:last-child {
+    text-align: right;
+}
+
+/* 隐藏的标准值选择 */
+.standard-values {
+    display: none; /* 隐藏标准值单选按钮 */
+}
+
+/* 情感描述区域 */
+.emotion-description {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.v-description, .a-description {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8em;
+    color: #777;
+}
+
+/* 修改描述文字的定位方式 */
+.slider-descriptions {
+    margin-top: 5px;
+    margin-bottom: 30px;
+    height: 20px;
+    position: relative;
+    width: 100%;
+}
+
+/* 修改默认对齐方式，使用绝对定位精确对齐 */
+.slider-descriptions span {
+    position: absolute;
+    text-align: center;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    font-size: 16px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* V值滑动条（-2到2）的数字标签定位 */
+#test-v-slider + .slider-descriptions span:nth-child(1) {
+    left: 0%; /* -2 */
+}
+
+#test-v-slider + .slider-descriptions span:nth-child(2) {
+    left: 25%; /* -1 */
+}
+
+#test-v-slider + .slider-descriptions span:nth-child(3) {
+    left: 50%; /* 0 */
+}
+
+#test-v-slider + .slider-descriptions span:nth-child(4) {
+    left: 75%; /* 1 */
+}
+
+#test-v-slider + .slider-descriptions span:nth-child(5) {
+    left: 100%; /* 2 */
+}
+
+/* A值滑动条（1到5）的数字标签定位 */
+#test-a-slider + .slider-descriptions span:nth-child(1) {
+    left: 0%; /* 1 */
+}
+
+#test-a-slider + .slider-descriptions span:nth-child(2) {
+    left: 25%; /* 2 */
+}
+
+#test-a-slider + .slider-descriptions span:nth-child(3) {
+    left: 50%; /* 3 */
+}
+
+#test-a-slider + .slider-descriptions span:nth-child(4) {
+    left: 75%; /* 4 */
+}
+
+#test-a-slider + .slider-descriptions span:nth-child(5) {
+    left: 100%; /* 5 */
+}
+
+/* 添加极低唤醒的特殊定位 */
+.slider-descriptions span.very-low-arousal {
+    position: absolute;
+    left: 5%; /* 对应数值0的位置 (10%) */
+    width: auto;
+    transform: translateX(-50%); /* 居中对齐文字 */
+}
+
+/* 添加低唤醒的特殊定位 */
+.slider-descriptions span.low-arousal {
+    position: absolute;
+    left: 25%; /* 对应数值2的位置 (25%) */
+    width: auto;
+    transform: translateX(-50%); /* 居中对齐文字 */
+}
+
+/* 添加中等唤醒的特殊定位 */
+.slider-descriptions span.medium-arousal {
+    position: absolute;
+    left: 50%; /* 对应数值3的位置 (50%) */
+    width: auto;
+    transform: translateX(-50%); /* 居中对齐文字 */
+}
+
+/* 添加高唤醒的特殊定位 */
+.slider-descriptions span.high-arousal {
+    position: absolute;
+    left: 75%; /* 对应数值4的位置 (75%) */
+    width: auto;
+    transform: translateX(-50%); /* 居中对齐文字 */
+}
+
+/* 修改极高唤醒的特殊定位 */
+.slider-descriptions span.very-high-arousal {
+    position: absolute;
+    left: 95%; /* 对应数值5的位置 (90%) */
+    width: auto;
+    transform: translateX(-50%);
+}
+
+/* 修改V值效价描述的样式 */
+.slider-descriptions span.negative {
+    position: absolute;
+    left: 5%; /* 对应数值-2的位置 (10%) */
+    width: auto;
+    transform: translateX(-50%); /* 居中对齐文字 */
+}
+
+/* 修改V值效价描述的样式 */
+.slider-descriptions span.mild-negative {
+    position: absolute;
+    left: 25%; /* 对应数值-1的位置 (25%) */
+    width: auto;
+    transform: translateX(-50%); /* 居中对齐文字 */
+}
+
+.slider-descriptions span.neutral {
+    position: absolute;
+    left: 50%; /* 对应数值0的位置 (50%) */
+    width: auto;
+    transform: translateX(-50%); /* 居中对齐文字 */
+}
+
+.slider-descriptions span.mild-positive {
+    position: absolute;
+    left: 75%; /* 对应数值1的位置 (75%) */
+    width: auto;
+    transform: translateX(-50%); /* 居中对齐文字 */
+}
+
+.slider-descriptions span.positive {
+    position: absolute;
+    left: 95%; /* 对应数值2的位置 (90%) */
+    width: auto;
+    transform: translateX(-50%); /* 居中对齐文字 */
+}
+
+/* 特别调整slider-descriptions的位置，以确保与数值对齐 */
+.slider-descriptions {
+    margin-top: 5px;  /* 增加与上方刻度的间距 */
+    margin-bottom: 25px; /* 增加与下方内容的间距 */
+}
+
+/*===================================================
+    9点量表专用样式
+===================================================*/
+/* 9点量表A值滑动条（1-9）的描述文字定位 */
+#a-slider + .slider-descriptions span.very-low-arousal {
+    left: 0%; /* 对应数值1的位置 */
+}
+
+#a-slider + .slider-descriptions span.low-arousal {
+    left: 25%; /* 对应数值3的位置 */
+}
+
+#a-slider + .slider-descriptions span.medium-arousal {
+    left: 50%; /* 对应数值5的位置 */
+}
+
+#a-slider + .slider-descriptions span.high-arousal {
+    left: 75%; /* 对应数值7的位置 */
+}
+
+#a-slider + .slider-descriptions span.very-high-arousal {
+    left: 100%; /* 对应数值9的位置 */
+}
+
+/* 9点量表V值滑动条（-4到4）的描述文字定位 */
+#v-slider + .slider-descriptions span.negative {
+    left: 0%; /* 对应数值-4的位置 */
+}
+
+#v-slider + .slider-descriptions span.mild-negative {
+    left: 25%; /* 对应数值-2的位置 */
+}
+
+#v-slider + .slider-descriptions span.neutral {
+    left: 50%; /* 对应数值0的位置 */
+}
+
+#v-slider + .slider-descriptions span.mild-positive {
+    left: 75%; /* 对应数值2的位置 */
+}
+
+#v-slider + .slider-descriptions span.positive {
+    left: 100%; /* 对应数值4的位置 */
+}
+
+
+/*===================================================
+    8. 离散情感标注区域样式
+===================================================*/
+.discrete-emotions {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* 情感选项网格布局 */
+.emotion-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.emotion-option {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.emotion-option input[type="radio"] {
+    width: 40px;
+    height: 40px;
+    margin-right: 5px;
+}
+
+/* 圆形单选按钮样式 */
+.emotion-option input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    margin-right: 8px;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.emotion-option input[type="radio"]:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.emotion-option input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.emotion-option input[type="radio"]:hover {
+    border-color: #0056b3;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* 保留复选框样式以防其他地方使用 */
+.emotion-option input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    margin-right: 8px;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.emotion-option input[type="checkbox"]:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.emotion-option input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.emotion-option input[type="checkbox"]:hover {
+    border-color: #0056b3;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* 情感类型选择样式 */
+.emotion-type-selection {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.emotion-type {
+    display: flex;
+    align-items: center;
+}
+
+.emotion-type input[type="radio"] {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.emotion-type label {
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* 具体情感选择区域 */
+#specific-emotions {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fafafa;
+}
+
+#specific-emotions h3 {
+    margin-top: 0;
+    color: #3498db;
+}
+
+/* 多选提示样式 */
+.multi-selection-tip {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    border: 2px solid #2196f3;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    color: #1976d2;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(33, 150, 243, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.multi-selection-tip::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #2196f3 0%, #9c27b0 100%);
+}
+
+.multi-selection-tip strong {
+    color: #1565c0;
+    font-weight: 600;
+}
+
+/*===================================================
+    9. 按钮样式
+===================================================*/
+/* 基础按钮样式 */
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+/* 操作按钮容器 */
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* VA保存按钮 */
+#save-va-button {
+    background-color: #3498db;
+    color: white;
+}
+
+#save-va-button:hover {
+    background-color: #2980b9;
+}
+
+/* VA保存按钮已保存状态 */
+#save-va-button.saved {
+    background-color: #27ae60; /* 绿色 - 已保存VA标注 */
+    color: white;
+}
+
+#save-va-button.saved:hover {
+    background-color: #229954;
+}
+
+/* 离散情感保存按钮 */
+#save-discrete-button {
+    background-color: #e74c3c;
+    color: white;
+}
+
+#save-discrete-button:hover {
+    background-color: #c0392b;
+}
+
+/* 离散情感保存按钮已保存状态 */
+#save-discrete-button.saved {
+    background-color: #27ae60; /* 绿色 - 已保存离散情感标注 */
+    color: white;
+}
+
+#save-discrete-button.saved:hover {
+    background-color: #229954;
+}
+
+
+
+/* 继续和下一条按钮 */
+#next-button, #continue-button {
+    background-color: #2ecc71;
+    color: white;
+}
+
+#next-button:hover, #continue-button:hover {
+    background-color: #27ae60;
+}
+
+/* 返回按钮 */
+#back-button {
+    background-color: #e74c3c;
+    color: white;
+}
+
+#back-button:hover {
+    background-color: #c0392b;
+}
+
+/* 上一条按钮 */
+#prev-button {
+    background-color: #f39c12;
+    color: white;
+}
+
+#prev-button:hover {
+    background-color: #d35400;
+}
+
+/* 禁用状态的按钮 */
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+
+
+/* 小型按钮样式(如退出登录) */
+.small-button {
+    padding: 5px 10px;
+    font-size: 12px;
+    margin-left: 10px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.small-button:hover {
+    background-color: #c0392b;
+}
+
+/* 切换按钮隐藏状态 */
+.switch-button-hidden {
+    display: none !important;
+}
+
+.switch-button-visible {
+    display: inline-block !important;
+}
+
+/* 移除焦点轮廓 */
+#main-container:focus,
+button:focus {
+    outline: none;
+}
+
+/* 导航按钮样式 */
+.nav-button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+    background-color: #2980b9;
+}
+
+.nav-button:focus {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+}
+
+/*===================================================
+    10. 登录模态框样式
+===================================================*/
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* 确保在最上层 */
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* 登录按钮 */
+#login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+#login-button:hover {
+    background-color: #2980b9;
+}
+
+/*===================================================
+    11. 用户信息区域样式 
+===================================================*/
+.user-info {
+    text-align: right;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.user-info span {
+    font-weight: bold;
+    color: #3498db;
+}
+
+/*===================================================
+    12. 计时器区域样式
+===================================================*/
+.timer-section {
+    background-color: #F1F3F4;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.timer-display {
+    margin-bottom: 10px;
+}
+
+.timer-label {
+    font-size: 16px;
+    color: #495057;
+    margin-right: 10px;
+}
+
+.timer-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+    font-family: 'Courier New', monospace;
+}
+
+.timer-description {
+    font-size: 12px;
+    color: #6c757d;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/*===================================================
+    12. 标准答案显示区域样式
+===================================================*/
+.standard-answers {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.standard-answers h3 {
+    margin: 0 0 15px 0;
+    color: #495057;
+    font-size: 18px;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 8px;
+}
+
+.answer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.answer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+}
+
+.answer-label {
+    font-weight: 500;
+    color: #495057;
+    min-width: 140px;
+}
+
+.answer-value {
+    font-weight: 600;
+    color: #007bff;
+    font-family: 'Courier New', monospace;
+    background-color: #e7f3ff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    min-width: 80px;
+    text-align: center;
+}
+
+.answer-value.emotion {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.answer-value.patient {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.answer-value.non-patient {
+    background-color: #f8d7da;
+    color: #721c24;
+}

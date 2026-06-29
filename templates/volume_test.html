@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音量设定 - 音频情感标注系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/volume_test.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>音量设定</h1>
+            <p class="subtitle">请根据以下音频示例调整您的系统音量</p>
+            <p class="headphone-reminder">⚠️ 请确保您已佩戴好耳机后再进行音量测试</p>
+        </div>
+        
+        <div class="content">
+            <div class="audio-section">
+                <div class="audio-item">
+                    <h3>最小音量示例 (A1)</h3>
+                    <p class="description">这是最小音量的音频示例，请确保您能够清楚听到</p>
+                    <div class="audio-controls">
+                        <audio id="audio-a1" controls preload="metadata">
+                            <source src="{{ url_for('static', filename='data/volume_test/A1-2.wav') }}" type="audio/wav">
+                            您的浏览器不支持音频播放。
+                        </audio>
+                        <button class="play-btn" onclick="playAudio('audio-a1')">播放 A1</button>
+                    </div>
+                </div>
+                
+                <div class="audio-item">
+                    <h3>最大音量示例 (A5)</h3>
+                    <p class="description">这是最大音量的音频示例，请确保音量适中，不会过于刺耳</p>
+                    <div class="audio-controls">
+                        <audio id="audio-a5" controls preload="metadata">
+                            <source src="{{ url_for('static', filename='data/volume_test/A5-3.wav') }}" type="audio/wav">
+                            您的浏览器不支持音频播放。
+                        </audio>
+                        <button class="play-btn" onclick="playAudio('audio-a5')">播放 A5</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="volume-setting-section">
+                <h3>音量设置</h3>
+                <p class="instruction">请听完上述两个音频示例后，根据您当前的系统音量设置，输入一个0-100之间的数值来表示您的音量大小：</p>
+                
+                <div class="volume-input-group">
+                    <label for="volume-input">当前音量设置：</label>
+                    <input type="number" id="volume-input" min="0" max="100" placeholder="请输入0-100之间的数值">
+                    <span class="unit">%</span>
+                </div>
+                
+                <div class="volume-slider">
+                    <input type="range" id="volume-slider" min="0" max="100" value="50">
+                    <div class="slider-labels">
+                        <span>0</span>
+                        <span>25</span>
+                        <span>50</span>
+                        <span>75</span>
+                        <span>100</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-section">
+                <button id="save-volume" class="btn btn-primary" disabled>保存音量设置并继续</button>
+                <p class="note">保存后将进入接下来的测试页面</p>
+            </div>
+        </div>
+        
+        <div class="user-info">
+            当前用户: <span id="current-user"></span>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/volume_test.js') }}"></script>
+</body>
+</html>

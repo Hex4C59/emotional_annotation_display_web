@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员仪表板 - 情感标注系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* 加载动画 */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- 顶部导航栏 -->
+        <header class="admin-header">
+            <div class="header-content">
+                <h1>情感标注系统 - 管理员仪表板</h1>
+                <div class="header-actions">
+                    <span id="admin-username">管理员</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 侧边栏导航 -->
+        <nav class="admin-sidebar">
+            <ul class="nav-menu">
+                <li><a href="#users" class="nav-link active" data-section="users">用户管理</a></li>
+                <li><a href="#admins" class="nav-link" data-section="admins">管理员管理</a></li>
+                <li><a href="#test-settings" class="nav-link" data-section="test-settings">测试设置</a></li>
+
+                <li><a href="#quality" class="nav-link" data-section="quality">质量分析</a></li>
+                <li><a href="#consistency" class="nav-link" data-section="consistency">一致性分析</a></li>
+                <li><a href="#export" class="nav-link" data-section="export">数据导出</a></li>
+                <li><a href="#system" class="nav-link" data-section="system">系统状态</a></li>
+            </ul>
+        </nav>
+
+        <!-- 主内容区域 -->
+        <main class="admin-main">
+
+            <!-- 用户管理 -->
+            <section id="users-section" class="content-section active">
+                <h2>用户管理</h2>
+                <div class="section-actions">
+                    <button id="refresh-users" class="btn btn-primary">刷新数据</button>
+                    <div class="filter-group">
+                        <label for="user-group-filter">筛选分组:</label>
+                        <select id="user-group-filter" class="form-select">
+                            <option value="">所有分组</option>
+                            <option value="第一组">第一组</option>
+                            <option value="第二组">第二组</option>
+                            <option value="第三组">第三组</option>
+    
+                            <option value="未分组">未分组</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="users-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>用户名</th>
+                                <th>分组</th>
+                                <th>分组数据量</th>
+                                <th>完成数</th>
+                                <th>完成率</th>
+                                <th>平均播放次数</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 管理员管理 -->
+            <section id="admins-section" class="content-section">
+                <h2>管理员管理</h2>
+                <div class="section-actions">
+                    <button id="refresh-admins" class="btn btn-primary">刷新数据</button>
+                    <button id="create-admin-btn" class="btn btn-success" style="display: none;">创建管理员</button>
+                    <button id="change-password-btn" class="btn btn-warning">修改密码</button>
+                </div>
+                <div class="table-container">
+                    <table id="admins-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>用户名</th>
+                                <th>角色</th>
+                                <th>描述</th>
+                                <th>状态</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+
+
+            <!-- 质量分析 -->
+            <section id="quality-section" class="content-section">
+                <h2>质量分析</h2>
+                <div class="section-actions">
+                    <div class="filter-group">
+                        <label for="quality-group-filter">选择分组:</label>
+                        <select id="quality-group-filter" class="form-select">
+                            <option value="">所有数据</option>
+                            <!-- 动态加载分组选项 -->
+                        </select>
+                    </div>
+                    <button id="refresh-quality" class="btn btn-primary">刷新数据</button>
+                </div>
+                <div id="quality-charts-container">
+                    <!-- 分组数据显示区域 -->
+                    <div id="group-quality-charts" style="display: none;">
+                        <div class="charts-container">
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h3>A值分布（按用户）</h3>
+                                    <button class="btn btn-secondary btn-sm export-chart-btn" data-chart="a-value-chart">导出图片</button>
+                                </div>
+                                <canvas id="a-value-chart"></canvas>
+                            </div>
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h3>V值分布（按用户）</h3>
+                                    <button class="btn btn-secondary btn-sm export-chart-btn" data-chart="v-value-chart">导出图片</button>
+                                </div>
+                                <canvas id="v-value-chart"></canvas>
+                            </div>
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h3>离散情感分布（按用户）</h3>
+                                    <button class="btn btn-secondary btn-sm export-chart-btn" data-chart="discrete-emotion-user-chart">导出图片</button>
+                                </div>
+                                <canvas id="discrete-emotion-user-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 全局数据显示区域 -->
+                    <div id="global-quality-charts">
+                        <div class="charts-container">
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h3>A值分布</h3>
+                                    <button class="btn btn-secondary btn-sm export-chart-btn" data-chart="global-a-value-chart">导出图片</button>
+                                </div>
+                                <canvas id="global-a-value-chart"></canvas>
+                            </div>
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h3>V值分布</h3>
+                                    <button class="btn btn-secondary btn-sm export-chart-btn" data-chart="global-v-value-chart">导出图片</button>
+                                </div>
+                                <canvas id="global-v-value-chart"></canvas>
+                            </div>
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h3>离散情感分布</h3>
+                                    <button class="btn btn-secondary btn-sm export-chart-btn" data-chart="discrete-emotion-chart">导出图片</button>
+                                </div>
+                                <canvas id="discrete-emotion-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 数据导出 -->
+            <section id="export-section" class="content-section">
+                <h2>数据导出</h2>
+                <div class="export-form">
+                    <div class="form-group">
+                        <label for="export-format">导出格式:</label>
+                        <select id="export-format">
+                            <option value="csv">CSV</option>
+                            <option value="json">JSON</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="export-username">指定用户 (可选):</label>
+                        <input type="text" id="export-username" placeholder="留空表示所有用户">
+                    </div>
+
+                    <div class="form-actions">
+                        <button id="export-annotations-btn" class="btn btn-primary">导出标注数据</button>
+                        <button id="export-users-btn" class="btn btn-success">导出用户数据</button>
+                        <button id="export-admins-btn" class="btn btn-info">导出管理员数据</button>
+                        <button id="export-groups-btn" class="btn btn-warning">导出分组数据</button>
+                        <button id="export-user-annotations-btn" class="btn btn-secondary">导出用户标注数据(5点+9点量表)</button>
+                        <button id="batch-export-btn" class="btn btn-dark">批量导出</button>
+                        <button id="backup-database-btn" class="btn btn-danger">备份数据库</button>
+                        <button id="export-history-btn" class="btn btn-outline-primary">导出历史</button>
+                    </div>
+                </div>
+                <div id="export-result" class="result-message"></div>
+            </section>
+
+            <!-- 测试设置管理 -->
+            <section id="test-settings-section" class="content-section">
+                <h2>测试设置管理</h2>
+                <div class="test-settings-management">
+                    <div class="settings-card">
+                        <h3>用户测试跳过设置</h3>
+                        <p class="settings-description">管理用户是否需要经过测试和一致性检验页面。已通过测试的用户可以跳过这些步骤，直接进入标注页面。</p>
+                        
+                        <div class="settings-controls">
+                            <button id="refresh-test-settings" class="btn btn-primary">刷新用户列表</button>
+                        </div>
+                        
+                        <div class="test-settings-table">
+                            <table id="test-settings-table">
+                                <thead>
+                                    <tr>
+                                        <th>用户名</th>
+                                        <th>手机号</th>
+                                        <th>注册时间</th>
+                                        <th>跳过测试</th>
+                                        <th>跳过一致性测试</th>
+                                        <th>量表顺序</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="test-settings-tbody">
+                                    <!-- 动态加载用户测试设置 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 一致性分析 -->
+            <section id="consistency-section" class="content-section">
+                <h2>一致性分析</h2>
+                <div class="consistency-analysis">
+                    <div class="analysis-card">
+                        <h3>用户一致性详情</h3>
+                        
+                        <!-- 第一次一致性测试 -->
+                        <div class="consistency-section">
+                            <h4>第一次一致性测试</h4>
+                            <div class="user-selector">
+                                <label for="first-consistency-user-select">选择用户:</label>
+                                <select id="first-consistency-user-select">
+                                    <option value="">-- 请选择用户 --</option>
+                                </select>
+                                <button id="calculate-first-consistency" class="btn btn-primary">计算第一次一致性</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 第二次一致性测试 -->
+                        <div class="consistency-section">
+                            <h4>第二次一致性测试</h4>
+                            <div class="user-selector">
+                                <label for="second-consistency-user-select">选择用户:</label>
+                                <select id="second-consistency-user-select">
+                                    <option value="">-- 请选择用户 --</option>
+                                </select>
+                                <button id="calculate-second-consistency" class="btn btn-success">计算第二次一致性</button>
+                            </div>
+                        </div>
+                        
+                        <div id="consistency-results" class="consistency-results">
+                            <!-- 一致性计算结果将在这里显示 -->
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>第一次一致性报告</h3>
+                        <div class="report-controls">
+                            <button id="generate-consistency-report" class="btn btn-secondary">生成详细报告</button>
+                            <button id="export-consistency-data" class="btn btn-secondary">导出一致性数据</button>
+                            <button id="export-all-consistency-results" class="btn btn-success">导出全部一致性结果</button>
+                        </div>
+                        <div id="detailed-consistency-report" class="detailed-report">
+                            <!-- 详细报告将在这里显示 -->
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>第二次一致性报告</h3>
+                        <div class="report-controls">
+                            <button id="generate-second-consistency-report" class="btn btn-secondary">生成详细报告</button>
+                            <button id="export-second-consistency-data" class="btn btn-secondary">导出一致性数据</button>
+                            <button id="export-all-second-consistency-results" class="btn btn-success">导出全部一致性结果</button>
+                        </div>
+                        <div id="detailed-second-consistency-report" class="detailed-report">
+                            <!-- 详细报告将在这里显示 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 系统状态 -->
+            <section id="system-section" class="content-section">
+                <h2>系统状态</h2>
+                <div class="system-status">
+                    <div class="status-card">
+                        <h3>数据库状态</h3>
+                        <div id="database-status">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <h3>音频文件夹状态</h3>
+                        <div id="audio-folder-status">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <h3>磁盘空间</h3>
+                        <div id="disk-space-status">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                </div>
+                <div class="section-actions">
+                    <button id="refresh-system-status" class="btn btn-primary">刷新状态</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 用户详情模态框 -->
+    <div id="user-detail-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-username">用户详情</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-actions" style="margin-bottom: 15px;">
+                    <button id="export-user-csv-btn" class="btn btn-success">导出CSV</button>
+                </div>
+                <div id="user-detail-content">
+                    <!-- 动态加载用户详情 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 确认对话框 -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>确认操作</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message">确定要执行此操作吗？</p>
+                <div class="modal-actions">
+                    <button id="confirm-yes" class="btn btn-danger">确定</button>
+                    <button id="confirm-no" class="btn btn-secondary">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 创建管理员模态框 -->
+    <div id="create-admin-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>创建新管理员</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="create-admin-form">
+                    <div class="form-group">
+                        <label for="new-admin-username">用户名:</label>
+                        <input type="text" id="new-admin-username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-admin-password">密码:</label>
+                        <input type="password" id="new-admin-password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-admin-description">描述:</label>
+                        <input type="text" id="new-admin-description" name="description" placeholder="可选">
+                    </div>
+                    <div class="modal-actions">
+                        <button type="submit" class="btn btn-primary">创建</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('create-admin-modal')">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修改密码模态框 -->
+    <div id="change-password-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>修改管理员密码</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="change-password-form">
+                    <div class="form-group">
+                        <label for="old-password">当前密码:</label>
+                        <input type="password" id="old-password" name="old_password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">新密码:</label>
+                        <input type="password" id="new-password" name="new_password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-new-password">确认新密码:</label>
+                        <input type="password" id="confirm-new-password" name="confirm_password" required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="submit" class="btn btn-primary">修改</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('change-password-modal')">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 用户分组模态框 -->
+    <div id="user-group-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>设置用户分组</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="user-group-form">
+                    <div class="form-group">
+                        <label for="group-username">用户名:</label>
+                        <input type="text" id="group-username" name="username" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-group-select">选择分组:</label>
+                        <select id="user-group-select" name="user_group" required>
+                            <option value="">请选择分组</option>
+                            <option value="group1">第一组</option>
+                            <option value="group2">第二组</option>
+                            <option value="group3">第三组</option>
+    
+                            <option value="null">移除分组</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <p class="group-description">
+                            <strong>分组说明:</strong><br>
+                            • 第一组、第二组、第三组：参与正式数据标注<br>
+    
+                            • 移除分组：将用户从当前分组中移除
+                        </p>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="submit" class="btn btn-primary">保存</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('user-group-modal')">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入优化组件 -->
+    <script src="{{ url_for('static', filename='js/CacheManager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/LoadingManager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/OptimizedDataService.js') }}"></script>
+    
+    <!-- 引入模块化JavaScript文件 -->
+    <script src="{{ url_for('static', filename='js/admin/AdminUtils.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modules/user-manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/AdminManager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modules/data-analysis.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/ExportManager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/TestSettings.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/ConsistencyAnalysis.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/SystemStatus.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/AdminDashboard.js') }}"></script>
+    
+    <!-- 初始化优化组件 -->
+    <script>
+        // 确保全局组件已初始化
+        if (!window.cacheManager) {
+            window.cacheManager = new CacheManager();
+        }
+        if (!window.loadingManager) {
+            window.loadingManager = new LoadingManager();
+        }
+        if (!window.optimizedDataService) {
+            window.optimizedDataService = new OptimizedDataService();
+        }
+        
+        // 启动定期清理
+        if (window.cacheManager.startPeriodicCleanup) {
+            window.cacheManager.startPeriodicCleanup();
+        }
+        
+        console.log('优化组件已初始化');
+    </script>
+</body>
+</html>

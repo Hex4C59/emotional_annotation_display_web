@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Emotion Annotation System</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+    <!-- 背景图片样式 -->
+    <style>
+        body {
+            background-image: url('/static/images/bg2.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        
+        .headphone-reminder {
+            color: #e74c3c;
+            font-size: 1.2em;
+            font-weight: 600;
+            background-color: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin: 15px auto 0;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.2);
+        }
+    </style>
+    
+    <!-- 初始化脚本 -->
+    <script>
+        // 简化初始化，直接显示主界面
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('main-container').style.display = 'block';
+        });
+    </script>
+</head>
+
+<body>
+
+    <!-- ===================== 主界面 ===================== -->
+    <div class="container" style="display: none;" id="main-container" tabindex="-1">
+        
+        <!-- 量表切换导航 -->
+        <div class="scale-navigation">
+            <div class="nav-buttons">
+                <a href="/5point" class="nav-button active">Our Method</a>
+                <a href="/9point" class="nav-button">Existing Method</a>
+            </div>
+        </div>
+        
+        <!-- 耳机提醒区 -->
+        <div class="headphone-reminder">
+            ⚠️ Please ensure you are wearing headphones before starting annotation
+        </div>
+        
+        <!-- 计时器显示区域 -->
+        <div class="timer-section" id="timerSection" style="display: none;">
+            <div class="timer-display">
+                <span class="timer-label">Test Time:</span>
+                <span class="timer-value" id="timerValue">00:00</span>
+            </div>
+            <p class="timer-description">
+                The system will periodically remind you to rest to protect your hearing health.
+            </p>
+        </div>
+        
+        <div class="main-content">
+            <!-- ========== 左侧边栏 ========== -->
+            <div class="sidebar">
+                <!-- 说话人选择区域 -->
+                <div class="speaker-selection" style="display: none;">
+                    <label for="speaker-select">Select Speaker:</label>
+                    <select id="speaker-select">
+                        <option value="">-- Please Select --</option>
+                    </select>
+                </div>
+                
+                <!-- 音频列表区域 -->
+                <div class="audio-list">
+                    <h2>Audio List</h2>
+                    <div class="list-container" id="audio-list-container">
+                        <!-- 音频列表将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ========== 右侧内容区 ========== -->
+            <div class="content">
+                <!-- 音频播放器区域 -->
+                <div class="audio-player">
+                    <h2>Audio Player</h2>
+                    <div class="player-container">
+                        <audio id="audio-player" controls></audio>
+                        <div class="player-controls">
+                            <button id="play-pause-button" class="play-button">Pause (Spacebar)</button>
+
+                            <div class="play-count-display">
+                                <span class="play-count-label">Play Count:</span>
+                                <span id="play-count-value">0</span>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- VA值情感标注区域 -->
+                <div class="emotion-labeling" id="va-labeling">
+                    <h2>Continuous Emotion Annotation (VA Values)</h2>
+                    <div class="emotion-container">
+                        <!-- 患者/非患者选择 -->
+                        <!-- <div class="patient-option">
+                            <div class="option-group">
+                                <input type="radio" id="is-patient" name="patient-status" value="patient" checked>
+                                <label for="is-patient">Patient</label>
+                                
+                                <input type="radio" id="not-patient" name="patient-status" value="non-patient">
+                                <label for="not-patient">Non-patient</label>
+                            </div>
+                        </div> -->
+
+                        <!-- VA值滑动条 -->
+                        <div class="slider-container">
+                            <!-- A值滑动条 -->
+                            <div class="slider-group">
+                                <label for="a-slider">A Value (Arousal):</label>
+                                <input type="range" id="a-slider" min="1" max="5" value="1" step="0.25">
+                                <div class="slider-ticks" id="a-slider-ticks">
+                                    <span>1.00</span>
+                                    <span>1.50</span>
+                                    <span>2.00</span>
+                                    <span>2.50</span>
+                                    <span>3.00</span>
+                                    <span>3.50</span>
+                                    <span>4.00</span>
+                                    <span>4.50</span>
+                                    <span>5.00</span>
+                                </div>
+                                <span id="a-value" style="display: none">3</span>
+                            </div>
+                            
+                            <!-- 修改唤醒程度描述 -->
+                            <div class="slider-descriptions">
+                                <span class="very-low-arousal">Very Low</span>
+                                <span></span> <!-- 1.5的空位置 -->
+                                <span class="low-arousal">Low</span>
+                                <span></span> <!-- 2.5的空位置 -->
+                                <span class="medium-arousal">Medium</span>
+                                <span></span> <!-- 3.5的空位置 -->
+                                <span class="high-arousal">High</span>
+                                <span></span> <!-- 4.5的空位置 -->
+                                <span class="very-high-arousal">Very High</span>
+                            </div>
+
+                            <!-- V值滑动条 -->
+                            <div class="slider-group">
+                                <label for="v-slider">V Value (Valence):</label>
+                                <input type="range" id="v-slider" min="-2" max="2" value="0" step="0.25">
+                                <div class="slider-ticks" id="v-slider-ticks">
+                                    <span>-2.00</span>
+                                    <span>-1.50</span>
+                                    <span>-1.00</span>
+                                    <span>-0.50</span>
+                                    <span>0.00</span>
+                                    <span>0.50</span>
+                                    <span>1.00</span>
+                                    <span>1.50</span>
+                                    <span>2.00</span>
+                                </div>
+                                <span id="v-value" style="display: none">0</span>
+                            </div>
+                            <!-- 添加V值效价描述 -->
+                            <div class="slider-descriptions">
+                                <span class="negative">Negative</span>
+                                <span></span> <!-- -1.5的空位置 -->
+                                <span class="mild-negative">Mild Negative</span>
+                                <span></span> <!-- -0.5的空位置 -->
+                                <span class="neutral">Neutral</span>
+                                <span></span> <!-- 0.5的空位置 -->
+                                <span class="mild-positive">Mild Positive</span>
+                                <span></span> <!-- 1.5的空位置 -->
+                                <span class="positive">Positive</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 离散情感标注区域 -->
+                <div class="emotion-labeling" id="discrete-labeling" style="display: none;">
+                    <h2>Discrete Emotion Annotation</h2>
+                    <div class="emotion-container">
+                        <div class="discrete-emotions">
+                            <h3>Please select emotion type:</h3>
+                            
+                            <!-- 中性/非中性选择 -->
+                            <div class="emotion-type-selection">
+                                <div class="emotion-type">
+                                    <input type="radio" name="emotion-type" id="neutral-type" value="neutral" checked>
+                                    <label for="neutral-type">Neutral</label>
+                                </div>
+                                <div class="emotion-type">
+                                    <input type="radio" name="emotion-type" id="non-neutral-type" value="non-neutral">
+                                    <label for="non-neutral-type">Non-neutral</label>
+                                </div>
+                            </div>
+                            
+                            <!-- 具体情感选择 -->
+                            <div id="specific-emotions" style="display: none;">
+                                <h3>Please select specific emotion label:</h3>
+                                <div class="emotion-options">
+                                    <div class="emotion-option">
+                                        <input type="radio" name="discrete-emotion" id="emotion-happy" value="happy">
+                                        <label for="emotion-happy">Happy</label>
+                                    </div>
+                                    <div class="emotion-option">
+                                        <input type="radio" name="discrete-emotion" id="emotion-angry" value="angry">
+                                        <label for="emotion-angry">Angry</label>
+                                    </div>
+                                    <div class="emotion-option">
+                                        <input type="radio" name="discrete-emotion" id="emotion-sad" value="sad">
+                                        <label for="emotion-sad">Sad</label>
+                                    </div>
+                                    <div class="emotion-option">
+                                        <input type="radio" name="discrete-emotion" id="emotion-fear" value="fear">
+                                        <label for="emotion-fear">Fear</label>
+                                    </div>
+                                    <div class="emotion-option">
+                                        <input type="radio" name="discrete-emotion" id="emotion-disgust" value="disgust">
+                                        <label for="emotion-disgust">Disgust</label>
+                                    </div>
+                                    <div class="emotion-option">
+                                        <input type="radio" name="discrete-emotion" id="emotion-surprise" value="surprise">
+                                        <label for="emotion-surprise">Surprise</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 操作按钮区域 -->
+                <div class="action-buttons">
+                    <button id="continue-button" disabled>Discrete(Q)</button>
+                    <button id="back-button" style="display: none;">VA(Q)</button>
+                    <button id="save-va-button" disabled>Save VA(W)</button>
+                    <button id="save-discrete-button" disabled style="display: none;">Save Discrete(W)</button>
+                    <button id="prev-button" disabled>Previous(E)</button>
+                    <button id="next-button" disabled>Next(R)</button>
+                </div>
+                
+                <!-- 标准答案显示区域 -->
+                <div class="standard-answers" id="standard-answers" style="display: none;">
+                    <h3>📝 Standard Labels</h3>
+                    <div class="answer-content">
+                        <div class="answer-row">
+                            <span class="answer-label">V Value (Valence):</span>
+                            <span class="answer-value" id="standard-v-value">-</span>
+                        </div>
+                        <div class="answer-row">
+                            <span class="answer-label">A Value (Arousal):</span>
+                            <span class="answer-value" id="standard-a-value">-</span>
+                        </div>
+                        <div class="answer-row">
+                            <span class="answer-label">Discrete Emotion:</span>
+                            <span class="answer-value" id="standard-discrete-emotion">-</span>
+                        </div>
+                        <!-- <div class="answer-row">
+                            <span class="answer-label">Patient Status:</span>
+                            <span class="answer-value" id="standard-patient-status">-</span>
+                        </div> -->
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- 引入优化组件 -->
+    <script src="/static/js/CacheManager.js"></script>
+    <script src="/static/js/LoadingManager.js"></script>
+    <script src="/static/js/OptimizedDataService.js"></script>
+    
+    <!-- 引入JavaScript文件 -->
+    <script src="/static/js/userManager.js"></script>
+    <script src="/static/js/audioPlayer.js"></script>
+    <script src="/static/js/audioListManager.js"></script>
+    <script src="/static/js/emotionAnnotator.js"></script>
+    <script src="/static/js/keyboardHandler.js"></script>
+    <script src="/static/js/dataService.js"></script>
+    <script src="/static/js/standardAnswerService.js"></script>
+    <script src="/static/js/main.js"></script>
+    
+    <!-- 初始化优化组件 -->
+    <script>
+        // 初始化全局组件
+        window.cacheManager = new CacheManager();
+        window.loadingManager = new LoadingManager();
+        window.optimizedDataService = new OptimizedDataService();
+        
+        // 启动定期清理
+        window.cacheManager.startPeriodicCleanup();
+        
+        console.log('Client optimization components initialized');
+    </script>
+</body>
+</html>
+

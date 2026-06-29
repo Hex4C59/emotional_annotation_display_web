@@ -1,0 +1,74 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Flask/runtime
+instance/
+.webassets-cache/
+
+# Logs and process output
+logs/
+*.log
+tmux-*.log
+
+# Local databases and generated state
+*.db
+*.sqlite
+*.sqlite3
+database/*.db
+database/*.sqlite
+database/*.sqlite3
+
+# Large/local datasets and user annotation data
+data/
+docs/user_data/
+docs/*.xlsx
+docs/*.xls
+database/tools/*.xlsx
+
+# Audio/media datasets
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.m4a
+
+# Generated reports/exports
+exports/
+reports/
+output/
+outputs/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build/package artifacts
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# Keep dependency lockfile tracked
+!uv.lock

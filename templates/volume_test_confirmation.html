@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音量设定完成确认</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/volume_test.css') }}">
+    <style>
+        .confirmation-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .confirmation-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .confirmation-header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .status-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #c3e6cb;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .volume-data-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .volume-data-section h3 {
+            color: #495057;
+            margin-bottom: 15px;
+        }
+        
+        .volume-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .volume-label {
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .volume-value {
+            font-size: 18px;
+            color: #007bff;
+            font-weight: bold;
+        }
+        
+        .audio-test-section {
+            margin-bottom: 30px;
+        }
+        
+        .audio-test-section h3 {
+            color: #495057;
+            margin-bottom: 15px;
+        }
+        
+        .audio-player-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .audio-item {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .audio-item h4 {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        
+        .audio-item audio {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .audio-description {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+
+        
+        /* 背景图片样式 */
+        body {
+            background-image: url('{{ url_for("static", filename="images/bg2.png") }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="confirmation-container">
+            <div class="confirmation-header">
+                <h1>音量设定完成确认</h1>
+                <p class="headphone-reminder">⚠️ 请确保您已佩戴好耳机后再进行音量测试</p>
+                <div class="status-message">
+                     您已成功完成音量设定！
+                </div>
+            </div>
+            
+            <div class="volume-data-section">
+                <h3>您的音量设置</h3>
+                <div class="volume-display">
+                    <span class="volume-label">当前音量设置：</span>
+                    <span class="volume-value" id="volumeValue">加载中...</span>
+                </div>
+                <p style="color: #6c757d; font-size: 16px; font-weight: bold; margin-top: 10px;">
+                    这是您在音量设定中设置的音量值，请使用此音量进行后续的情感标注测试。
+                </p>
+            </div>
+            
+            <div class="audio-test-section">
+                <h3>测试音频回放</h3>
+                <p style="color: #6c757d; margin-bottom: 15px;">
+                    您可以重新听取测试音频，确认当前音量设置是否合适：
+                </p>
+                
+                <div class="audio-player-container">
+                    <div class="audio-item">
+                        <h4>A1 示例音频</h4>
+                        <audio controls preload="metadata">
+                            <source src="/api/test/audio/A1-2.wav" type="audio/wav">
+                            您的浏览器不支持音频播放。
+                        </audio>
+                        <div class="audio-description">低音量示例</div>
+                    </div>
+                    
+                    <div class="audio-item">
+                        <h4>A5 示例音频</h4>
+                        <audio controls preload="metadata">
+                            <source src="/api/test/audio/A5-2.wav" type="audio/wav">
+                            您的浏览器不支持音频播放。
+                        </audio>
+                        <div class="audio-description">高音量示例</div>
+                    </div>
+                </div>
+            </div>
+            
+
+            
+            <div class="action-buttons">
+                <button class="btn btn-warning" onclick="retakeTest()">
+                    重新设定
+                </button>
+                <button class="btn btn-primary" onclick="continueToNext()">
+                    继续测试
+                </button>
+            </div>
+            
+            <div class="loading" id="loadingIndicator">
+                <div class="loading-spinner"></div>
+                <p>正在跳转...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/volume_test_confirmation.js') }}"></script>
+</body>
+</html>
