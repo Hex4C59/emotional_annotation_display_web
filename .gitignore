@@ -41,6 +41,7 @@ data/
 docs/user_data/
 docs/*.xlsx
 docs/*.xls
+docs/*.pdf
 database/tools/*.xlsx
 
 # Audio/media datasets
