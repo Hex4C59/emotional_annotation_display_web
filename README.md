@@ -44,6 +44,24 @@ The system includes testing, consistency evaluation, volume testing, and adminis
 
 The system provides tools for annotation management, standard answer management, group assignment, data analysis, export, and progress tracking.
 
+## Interface Preview
+
+### 5-Point Valence-Arousal Annotation
+
+![5-point valence-arousal annotation interface](images/annotation-va-5point-interface.png)
+
+### 9-Point Valence-Arousal Annotation
+
+![9-point valence-arousal annotation interface](images/annotation-va-9point-interface.png)
+
+### 9-Point Annotation with Standard Labels
+
+![9-point annotation interface with standard labels](images/annotation-va-9point-standard-labels.png)
+
+### Discrete Emotion Annotation with Standard Labels
+
+![discrete emotion annotation interface with standard labels](images/annotation-discrete-standard-labels.png)
+
 ## Use Cases
 
 This project can be used for:
@@ -155,6 +173,24 @@ Common pages:
 - Counseling speech data may contain sensitive personal information. Make sure all data is properly authorized, anonymized, and ethically handled before use.
 - Emotion annotation is inherently subjective. Multiple annotators, standard-answer tests, consistency checks, and voting mechanisms are recommended.
 - Real conversational emotions are often more subtle than acted emotions, so model performance may be lower than on traditional acted speech datasets.
+
+## Dataset Access and License Agreement
+
+The CCSEMO dataset is released for research purposes only. Researchers who request access to the dataset should complete and sign the CCSEMO non-exclusive license agreement before receiving the data.
+
+The license agreement template is provided as:
+
+```text
+License Agreement_CCSEMO_SIAT.docx
+```
+
+Completed license agreements and dataset access requests can be sent to:
+
+```text
+huanraozhineng2@siat.ac.cn
+```
+
+The signed agreement should include the applicant's name, title, institution, address, email, handwritten signature, and date. The dataset must not be used for commercial purposes, redistributed, published, copied, sublicensed, or made available to third parties without prior written consent from AIMSL, SIAT.
 
 ## Associated Publication
 
