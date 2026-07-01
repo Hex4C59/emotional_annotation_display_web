@@ -1,5 +1,5 @@
 [project]
-name = "emotional-annotation-display-web"
+name = "CCSEMO_dataset_and_annotation_tool"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"

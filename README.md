@@ -1,4 +1,4 @@
-# Chinese Counseling Speech Emotion Annotation Web System
+# CCSEMO Dataset and Annotation Tool
 
 ## Project Overview
 
@@ -84,7 +84,7 @@ Dimensional Emotions
 ## Project Structure
 
 ```text
-emotional_annotation_display_web/
+CCSEMO_dataset_and_annotation_tool/
 ├── app.py                    # Flask application entry
 ├── start_server.py           # Server startup script
 ├── start_server_local.py     # Local reverse-proxy startup script

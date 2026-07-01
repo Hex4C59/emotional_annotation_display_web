@@ -2,7 +2,7 @@
 
 set -e
 
-PROJECT_DIR="/home/aimsl/code/Python/emotional_annotation_display_web"
+PROJECT_DIR="/home/aimsl/code/Python/CCSEMO_dataset_and_annotation_tool"
 
 cd "$PROJECT_DIR"
 

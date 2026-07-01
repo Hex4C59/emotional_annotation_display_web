@@ -1,5 +1,5 @@
 def main():
-    print("Hello from emotional-annotation-display-web!")
+    print("Hello from CCSEMO_dataset_and_annotation_tool!")
 
 
 if __name__ == "__main__":
