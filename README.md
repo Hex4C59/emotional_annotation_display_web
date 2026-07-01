@@ -65,3 +65,18 @@ The annotation system provides two task-specific interfaces: a discrete emotion 
 ### Continuous Emotion Annotation Interface
 
 ![Continuous emotion annotation interface](images/continuous-emotion-annotation-interface.png)
+
+## Citation
+
+If you use CCSEMO or the related resources in this repository, please cite:
+
+```bibtex
+@article{guo2026ccsemo,
+  title={CCSEMO: A Chinese Counseling Speech Emotion Dataset annotated via a unified standardized annotation framework},
+  author={Guo, Zhixing and Liu, Yang and Yang, Yudong and Yu, Hangbin and Su, Rongfeng and Yan, Nan and Wang, Lan},
+  journal={Pattern Recognition},
+  pages={114277},
+  year={2026},
+  publisher={Elsevier}
+}
+```
